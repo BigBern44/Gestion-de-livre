@@ -20,11 +20,17 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
-      - name: Grant execute permission for Gradle wrapper
+      - name: Grant execute permission for Gradle
         run: chmod +x ./gradlew
 
-      - name: Build with Gradle
+      - name: Build and run tests
         run: ./gradlew build --no-daemon
 
-      - name: Run tests
-        run: ./gradlew test --no-daemon
+      - name: Generate JaCoCo report
+        run: ./gradlew jacocoTestReport --no-daemon
+
+      - name: Upload JaCoCo HTML report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: build/reports/jacoco/test/html
